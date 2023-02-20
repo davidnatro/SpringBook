@@ -1,3 +1,5 @@
+import chapter2.context.beans.Parrot;
+import chapter2.context.beans.ProjectConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Program {

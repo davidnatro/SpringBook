@@ -1,3 +1,5 @@
+package chapter2.context.beans;
+
 import lombok.Getter;
 import lombok.Setter;
 
