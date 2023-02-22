@@ -84,7 +84,7 @@ public class SomeComponents {
 }
 
 @Configuration
-@ComponentScan
+@ComponentScan // == @ComponentScan(basePackages = "chapter2.context.beans")
 public class ProjectConfiguration { } 
 ```
 
