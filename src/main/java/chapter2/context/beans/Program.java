@@ -1,3 +1,5 @@
+package chapter2.context.beans;
+
 import chapter2.context.beans.ProjectConfiguration;
 import chapter2.context.beans.SomeComponent;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
