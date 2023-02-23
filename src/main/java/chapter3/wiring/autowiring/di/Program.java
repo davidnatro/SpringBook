@@ -1,7 +1,5 @@
 package chapter3.wiring.autowiring.di;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Program {
