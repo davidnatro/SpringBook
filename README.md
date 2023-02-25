@@ -257,4 +257,45 @@ public class ProjectConfiguration {
               исключение, сообщающее о том, что в контексте есть несколько бинов одного типа и Spring не может выбрать
               один из них.
 
-### [Глава 4 (Абстракции)](src/main/java/chapter4/abstractions)
+### [Глава 4 (Абстракции)](src/main/java/chapter4)
+
+### [Глава 5 (Область видимости и жизненный цикл бинов)](src/main/java/chapter5)
+
+``` java
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+public class CommentProcessor {
+    @Autowired
+    private CommentRepository commentRepository;
+    // остальной код
+}
+```
+
+Теперь мы можем получить из контекста Spring экземпляр CommentProcessor Но будьте внимательны! Данный экземпляр будет
+вам нужен при каждом вызове метода sendComment(), поэтому запрос бина должен находиться внутри этого метода Чтобы
+получить такой результат, нужно внедрить контекст Spring (ApplicationContext) непосредственно в бин CommentService,
+используя аннотацию @Autowired В методе sendComment() мы получаем экземпляр CommentProcessor, вызывая getBean() для
+контекста приложения
+
+``` java
+@Service
+public class CommentService {
+    @Autowired
+    private ApplicationContext context;
+    public void sendComment(Comment c) {
+        CommentProcessor p =
+            context.getBean(CommentProcessor.class);
+        p.setComment(c);
+        p.processComment(c);
+        p.validateComment(c);
+        c = p.getComment();
+        // сделать что-нибудь еще
+    }
+}
+```
+
+Не следует внедрять CommentProcessor непосредственно в бин CommentService — это было бы ошибкой Бин CommentService
+является одиночным, а следовательно, Spring создает только один экземпляр этого класса Таким образом, при создании
+бина CommentService Spring сразу внедрит и все зависимости класса В итоге получим единственный экземпляр
+CommentProcessor И этот уникальный экземпляр будет использоваться при каждом вызове метода sendComment(), поэтому при
+наличии нескольких потоков возникнет такое же состояние гонки, как и в случае одиночного бина 
