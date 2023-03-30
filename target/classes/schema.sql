@@ -1,14 +1,6 @@
-CREATE TABLE IF NOT EXISTS purchase
+create table account
 (
-    id
-    INT
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    product
-    varchar
-(
-    50
-) NOT NULL,
-    price double NOT NULL
-    );
+    id     INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name   VARCHAR(50) NOT NULL,
+    amount DOUBLE      NOT NULL
+);
