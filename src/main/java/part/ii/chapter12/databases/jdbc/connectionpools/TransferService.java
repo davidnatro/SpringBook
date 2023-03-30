@@ -7,16 +7,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransferService {
-    private final AccountRepository accountRepository;
+    private final AccountRepositorySpringData accountRepository;
 
-    public TransferService(AccountRepository accountRepository) {
+    public TransferService(AccountRepositorySpringData accountRepository) {
         this.accountRepository = accountRepository;
     }
 
     @Transactional
     public void transferMoney(long senderId, long receiverId, BigDecimal amount) {
-        Account sender = accountRepository.findAccountById(senderId);
-        Account receiver = accountRepository.findAccountById(receiverId);
+        Account sender = accountRepository.findById(senderId)
+                                          .orElseThrow(AccountNotFoundException::new);
+
+        Account receiver = accountRepository.findById(receiverId)
+                                            .orElseThrow(AccountNotFoundException::new);
 
         BigDecimal senderNewAmount = sender.getAmount().subtract(amount);
         BigDecimal receiverNewAmount = receiver.getAmount().add(amount);
@@ -25,7 +28,11 @@ public class TransferService {
         accountRepository.changeAmount(receiverId, receiverNewAmount);
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAllAccounts();
+    public Iterable<Account> getAllAccounts() {
+        return accountRepository.findAll();
+    }
+
+    public List<Account> findAccountsByName(String name) {
+        return accountRepository.findAccountsByName(name);
     }
 }
